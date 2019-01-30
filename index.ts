@@ -36,8 +36,8 @@ export class Discord {
 }
 
 const discord = new Discord(
-  'PK7ONG8GO2WpnWWa2NM_zLj__R3gUnWO9bf7Gyi1qTtqVszVltFYqb7I4HJCxI7QDZs5',
-  '540023877724667906'
+  'VNGjmfitZqrnBzdRHIPeODJGGGdxeIBpW2unR7SaXb6rBjohE-W3C9ogaRziod0mL3G4',
+  '540025769250783243'
 )
 
 const twit = new Twit({
@@ -62,9 +62,11 @@ exports.findGoodTweet = (event: any, context: any, callback: any) => {
         console.log(`Retreived ${data.statuses.length} tweets`)
         for (const tweet of data.statuses) {
           discord.postMessage({
+            avatar_url: 'https://mosey.systems/tweety-bird.png',
             content: `Found ${tweet.id} / ${tweet.id_str}: "${
               tweet.extended_tweet ? tweet.extended_tweet.full_text : tweet.text
-            }"`
+            }"`,
+            username: 'The Tweet Monster'
           })
         }
       } else {

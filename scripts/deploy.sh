@@ -1,6 +1,5 @@
 tsc
-rm *.ts
 cp build/index.js .
-rm -rf node_modules/ts*
-rm -rf node_modules/typescript*
-zip -r ../deploy.zip . -x "*.json" -x ".gitignore" -x "build" -x "node_modules/ts*" -x "node_modules/typescript"
+rm -rf build
+rm package-lock.json
+zip -r deploy.zip . -x .gitignore *.zip *.ts *.git* node_modules/typescript/\* node_modules/@types*/\* node_modules/ts*/\* build/\*
