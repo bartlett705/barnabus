@@ -35,10 +35,7 @@ export class Discord {
   }
 }
 
-const discord = new Discord(
-  'VNGjmfitZqrnBzdRHIPeODJGGGdxeIBpW2unR7SaXb6rBjohE-W3C9ogaRziod0mL3G4',
-  '540025769250783243'
-)
+const discord = new Discord(process.env.DISCORD_TOKEN, '540025769250783243')
 
 const twit = new Twit({
   access_token: process.env.ACCESS_TOKEN,
