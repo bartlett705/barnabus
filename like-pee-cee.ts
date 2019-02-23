@@ -15,25 +15,26 @@ const dbClient = new Client()
 const [fetchLimit, likeLimi] = process.argv.slice(2)
 const handles = process.env.TARGETS.split(',')
 
-dbClient.connect().then(async () =>
-  handles.forEach(async (handle, index) => {
-    // logger.warn('Starting: ', handle)
-    const tweetsToLike = await findLikeableTweets(
-      Number(fetchLimit),
-      Number(likeLimi),
-      handle
-    )
-    await likeTweets(tweetsToLike)
-    logger.warn('Finished engaging with ', handle)
-    if (index === handles.length - 1) {
-      logger.info('Done with all handles.')
-      // await dbClient.end()
-    }
+dbClient
+  .connect()
+  .then(async () => {
+    const promises = handles.map(async (handle, index) => {
+      // logger.warn('Starting: ', handle)
+      const tweetsToLike = await findLikeableTweets(
+        Number(fetchLimit),
+        Number(likeLimi),
+        handle
+      )
+      await likeTweets(tweetsToLike)
+      logger.warn('Finished engaging with ', handle)
+    })
+    return Promise.all(promises)
   })
-)
-// .then(() => {
-//   process.exit(0)
-// })
+  .then(async () => {
+    logger.info('Done engaging with all handles; ending DB session')
+    dbClient.end()
+    process.exit(0)
+  })
 
 const findLikeableTweets = async (
   count: number,
@@ -215,7 +216,7 @@ function likeOrRetweet(
           faveErr
         )
       } else {
-        logger.info(
+        logger.log(
           `${actionName}ed ${tweetsToLike.indexOf(tweet) + 1}/${
             tweetsToLike.length
           } 👍 ${tweet.id_str} 🕛 ${tweet.created_at} 👱 ${
@@ -240,7 +241,7 @@ function likeOrRetweet(
           params
         )
         if (insertionResult) {
-          logger.warn(`Recorded ${tweet.id_str} as seen.`)
+          logger.log(`Recorded ${tweet.id_str} as seen.`)
           // Randomly follow the retweeted user
           if (tweet.retweeted_status && Math.random() < FOLLOW_RATE) {
             await followUser(tweet.retweeted_status.user.screen_name)
@@ -251,8 +252,9 @@ function likeOrRetweet(
           logger.error('DB err on', tweet.id_str)
           reject()
         }
+      } else {
+        resolve()
       }
-      resolve()
     })
   }
 }

@@ -78,6 +78,7 @@ export const followUser = (screenName: string) => {
 }
 
 // const usersToFollow = process.env.TARGETS.split(',')
+// const usersToFollow = ['travis_view']
 // console.log('Following: ', usersToFollow.join(', '))
 
 // usersToFollow.forEach(async (user) => await followUser(user))
