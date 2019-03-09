@@ -4,8 +4,13 @@ import { logger, twit } from './init-twit'
 export const verifyCreds = () =>
   twit
     .get('account/verify_credentials')
-    .then((results: any) => {
-      logger.debug('results', JSON.stringify(results, null, 2))
+    .then((results) => {
+      if (!results || !results.resp || results.resp.statusCode !== 200) {
+        logger.error('unexpected results!') 
+        logger.warn(JSON.stringify(results, null, 2))
+      } else {
+        logger.info('Creds Verified 👍')
+      }
     })
     .catch(logger.error)
 
@@ -15,11 +20,16 @@ export const post = async (status: string) =>
     {
       status
     },
-    (err: any, data: any) => {
+    (err, data: any) => {
       if (err) {
         logger.error('WHOOPS', JSON.stringify(err, null, 2))
       }
-      logger.debug('DATA:', JSON.stringify(data, null, 2))
+      else if (data.created_at) {
+        logger.info('A Poast...to toast 🎉')
+      } else {
+
+        logger.info('DATA:', JSON.stringify(data, null, 2))
+      }
     }
   )
 

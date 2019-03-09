@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import { logger } from './init-twit'
 import { post, verifyCreds } from './utils'
 
