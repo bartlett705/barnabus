@@ -1,6 +1,7 @@
+#!/usr/bin/env ts-node
 import { logger, twit } from './init-twit'
 
-const verifyCreds = () =>
+export const verifyCreds = () =>
   twit
     .get('account/verify_credentials')
     .then((results: any) => {
@@ -8,7 +9,7 @@ const verifyCreds = () =>
     })
     .catch(logger.error)
 
-const post = async (status: string) =>
+export const post = async (status: string) =>
   twit.post(
     'statuses/update',
     {
@@ -21,12 +22,6 @@ const post = async (status: string) =>
       logger.debug('DATA:', JSON.stringify(data, null, 2))
     }
   )
-
-// const content = process.argv[2]
-
-// verifyCreds()
-//   //   .then((_) => post(content).then(() => logger.log('Done!')))
-//   .catch((e) => logger.error(e))
 
 // const stream = twit.stream('statuses/filter', {
 //   track: 'trump is a baby'

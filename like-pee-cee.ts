@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import { Client } from 'pg'
 import { logger, queryDB, Tweet, twit } from './init-twit'
 import { followUser } from './utils'
